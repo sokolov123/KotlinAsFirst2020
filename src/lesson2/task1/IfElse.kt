@@ -3,9 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
-import kotlin.math.max
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
 // Максимальное количество баллов = 6
@@ -116,6 +114,10 @@ fun timeForHalfWay(
 
     if (distance > s1 && distance < s2) time = t1 + ((distance - s1) / v2)
 
+    if (distance == s1) time = t1
+
+    if (distance == s2) time = t1 + ((distance - s1) / v2)
+
     return (time)
 }
 
@@ -165,7 +167,7 @@ fun rookOrBishopThreatens(
 
     if (Math.abs(kingX - bishopX) == Math.abs(kingY - bishopY)) counter = 2
 
-    if ((rookX == kingX || rookY == kingY) && (kingX - bishopX == kingY - bishopY)) counter = 3
+    if ((rookX == kingX || rookY == kingY) && (abs(kingX - bishopX) == abs(kingY - bishopY))) counter = 3
 
     return (counter)
 }
@@ -180,32 +182,16 @@ fun rookOrBishopThreatens(
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     var counter: Int = 0
-
-    if (a >= b && a >= c) {
-        if (a.pow(2) > c.pow(2) + b.pow(2))
-            counter = 2
-        else
-            counter = 0
-    }
-    if (b >= a && b >= c) {
-        if (b.pow(2) > c.pow(2) + a.pow(2))
-            counter = 2
-        else
-            counter = 0
-    }
-    if (c >= b && c >= b) {
-        if (c.pow(2) > a.pow(2) + b.pow(2))
-            counter = 2
-        else
-            counter = 0
-    }
-
-    if (a.pow(2) + b.pow(2) == c.pow(2) ||
-        a.pow(2) + c.pow(2) == b.pow(2) ||
-        c.pow(2) + b.pow(2) == a.pow(2))
-        counter = 1
-
     if (a + b < c || a + c < b || b + c < a) counter = -1
+    else {
+        val cosA: Double = (b.pow(2) + c.pow(2) - a.pow(2)) / (2 * b * c)
+        val cosB: Double = (a.pow(2) + c.pow(2) - b.pow(2)) / (2 * a * c)
+        val cosC: Double = (b.pow(2) + a.pow(2) - c.pow(2)) / (2 * b * a)
+
+        if (cosA == 0.0 || cosB == 0.0 || cosC == 0.0) counter = 1
+        if (acos(cosA) > (PI / 2) || acos(cosB) > (PI / 2) || acos(cosC) > (PI / 2)) counter = 2
+        if (acos(cosA) < (PI / 2) && acos(cosB) < (PI / 2) && acos(cosC) < (PI / 2)) counter = 0
+    }
 
     return (counter)
 }
