@@ -68,17 +68,9 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String {
-    var n: String = "тут ничего не записано"
+    var n = "тут ничего не записано"
 
-    if (age < 10) {
-        when (age) {
-            1 -> n = "$age год"
-            2, 3, 4 -> n = "$age года"
-            5, 6, 7, 8, 9 -> n = "$age лет"
-        }
-    }
-
-    if (age >= 20) {
+    if (age < 10 || age >= 20) {
         when (age % 10) {
             1 -> n = "$age год"
             2, 3, 4 -> n = "$age года"
@@ -88,7 +80,7 @@ fun ageDescription(age: Int): String {
 
     if ((age % 100) in 10..19) n = "$age лет"
 
-    return (n)
+    return n
 }
 
 /**
@@ -104,21 +96,17 @@ fun timeForHalfWay(
     t3: Double, v3: Double
 ): Double {
     val distance: Double = ((t1 * v1) + (t2 * v2) + (t3 * v3)) / 2.0
-    var time: Double = 0.0
+    var time = 0.0
     val s1: Double = (t1 * v1) //для сокращения записи следующих операций
     val s2: Double = (t1 * v1) + (t2 * v2)
 
     if (distance < s1) time = distance / v1
-
     if (distance > s2) time = t1 + t2 + ((distance - s2) / v3)
-
     if (distance > s1 && distance < s2) time = t1 + ((distance - s1) / v2)
-
     if (distance == s1) time = t1
-
     if (distance == s2) time = t1 + ((distance - s1) / v2)
 
-    return (time)
+    return time
 }
 
 /**
@@ -135,15 +123,21 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int {
-    var counter: Int = 0
+    var counter = 0
+    var a = 0
+    var b = 0
 
-    if (rookX1 == kingX || rookY1 == kingY) counter = 1
+    if (rookX1 == kingX || rookY1 == kingY) a = 1
+    if (rookX2 == kingX || rookY2 == kingY) b = 1
 
-    if (rookX2 == kingX || rookY2 == kingY) counter = 2
+    if (a == 1 && b == 1) counter = 3
+    else
+        if (a == 1) counter = 1
+        else
+            if (b == 1) counter = 2
+    // мне в такой записи просто удобней смотреть где какие if вложены
 
-    if ((rookX1 == kingX || rookY1 == kingY) && (rookX2 == kingX || rookY2 == kingY)) counter = 3
-
-    return (counter)
+    return counter
 }
 
 /**
@@ -161,15 +155,15 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int {
-    var counter: Int = 0
+    var counter = 0
 
     if (rookX == kingX || rookY == kingY) counter = 1
 
-    if (Math.abs(kingX - bishopX) == Math.abs(kingY - bishopY)) counter = 2
+    if (abs(kingX - bishopX) == abs(kingY - bishopY)) counter = 2
 
     if ((rookX == kingX || rookY == kingY) && (abs(kingX - bishopX) == abs(kingY - bishopY))) counter = 3
 
-    return (counter)
+    return counter
 }
 
 /**
@@ -181,7 +175,7 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    var counter: Int = 0
+    var counter = 0
     if (a + b < c || a + c < b || b + c < a) counter = -1
     else {
         val cosA: Double = (b.pow(2) + c.pow(2) - a.pow(2)) / (2 * b * c)
@@ -193,7 +187,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
         if (acos(cosA) < (PI / 2) && acos(cosB) < (PI / 2) && acos(cosC) < (PI / 2)) counter = 0
     }
 
-    return (counter)
+    return counter
 }
 
 /**
@@ -205,7 +199,7 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    var length: Int = 0
+    var length = 0
 
     if ((a == b) && (d == c)) {
         length = -1
@@ -221,5 +215,5 @@ fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
 
     if (b < c || d < a) length = -1
 
-    return (length)
+    return length
 }
