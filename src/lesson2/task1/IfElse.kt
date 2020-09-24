@@ -68,17 +68,16 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
 fun ageDescription(age: Int): String {
-    var n = "тут ничего не записано"
-
-    if ((age / 10) % 10 == 1) n = "$age лет"
+    return if ((age / 10) % 10 == 1) "$age лет"
     else {
         when (age % 10) {
-            1 -> n = "$age год"
-            2, 3, 4 -> n = "$age года"
-            5, 6, 7, 8, 9, 0 -> n = "$age лет"
+            1 -> return "$age год"
+            2, 3, 4 -> return "$age года"
+            5, 6, 7, 8, 9, 0 -> return "$age лет"
+            else -> return ""
         }
     }
-    return n
+
 }
 
 /**
@@ -93,15 +92,14 @@ fun timeForHalfWay(
     t2: Double, v2: Double,
     t3: Double, v3: Double
 ): Double {
-    val distance: Double = ((t1 * v1) + (t2 * v2) + (t3 * v3)) / 2.0
+    val distance = ((t1 * v1) + (t2 * v2) + (t3 * v3)) / 2.0
     var time = 0.0
-    val s1: Double = (t1 * v1) //для сокращения записи следующих операций
-    val s2: Double = (t1 * v1) + (t2 * v2)
+    val s1 = (t1 * v1) //для сокращения записи следующих операций
+    val s2 = (t1 * v1) + (t2 * v2)
 
     if (distance <= s1) time = distance / v1
     if (distance >= s2) time = t1 + t2 + ((distance - s2) / v3)
     if (distance > s1 && distance < s2) time = t1 + ((distance - s1) / v2)
-    if (distance == s2) time = t1 + ((distance - s1) / v2)
 
     return time
 }
@@ -120,16 +118,12 @@ fun whichRookThreatens(
     rookX1: Int, rookY1: Int,
     rookX2: Int, rookY2: Int
 ): Int {
-    var counter = 0
-    var a = 0
-    var b = 0
-
-    if ((rookX1 == kingX || rookY1 == kingY) && (rookX2 == kingX || rookY2 == kingY)) counter = 3
+    return if ((rookX1 == kingX || rookY1 == kingY) && (rookX2 == kingX || rookY2 == kingY)) 3
     else
-        if (rookX1 == kingX || rookY1 == kingY) counter = 1
-        else counter = 2
-
-    return counter
+        if (rookX1 == kingX || rookY1 == kingY) 1
+        else
+            if (rookX2 == kingX || rookY2 == kingY) 2
+            else 0
 }
 
 /**
@@ -147,15 +141,12 @@ fun rookOrBishopThreatens(
     rookX: Int, rookY: Int,
     bishopX: Int, bishopY: Int
 ): Int {
-    var counter = 0
-
-    if (rookX == kingX || rookY == kingY) counter = 1
-
-    if (abs(kingX - bishopX) == abs(kingY - bishopY)) counter = 2
-
-    if ((rookX == kingX || rookY == kingY) && (abs(kingX - bishopX) == abs(kingY - bishopY))) counter = 3
-
-    return counter
+    return if ((rookX == kingX || rookY == kingY) && (abs(kingX - bishopX) == abs(kingY - bishopY))) 3
+    else
+        if (abs(kingX - bishopX) == abs(kingY - bishopY)) 2
+        else
+            if (rookX == kingX || rookY == kingY) 1
+            else 0
 }
 
 /**
@@ -167,20 +158,20 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    var n = 0.0
     var counter = 0
+
+    val cosA = (b.pow(2) + c.pow(2) - a.pow(2)) / (2 * b * c)
+    val cosB = (a.pow(2) + c.pow(2) - b.pow(2)) / (2 * a * c)
+    val cosC = (b.pow(2) + a.pow(2) - c.pow(2)) / (2 * b * a)
+
+    val n = minOf(cosA, cosB, cosC)
+
     if (a + b < c || a + c < b || b + c < a) counter = -1
     else {
-        val cosA: Double = (b.pow(2) + c.pow(2) - a.pow(2)) / (2 * b * c)
-        val cosB: Double = (a.pow(2) + c.pow(2) - b.pow(2)) / (2 * a * c)
-        val cosC: Double = (b.pow(2) + a.pow(2) - c.pow(2)) / (2 * b * a)
-        n = minOf(cosA, cosB, cosC)
-
         if (n == 0.0) counter = 1
         if (acos(n) > (PI / 2)) counter = 2
         if (acos(n) < (PI / 2)) counter = 0
     }
-
     return counter
 }
 
@@ -195,17 +186,11 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
     var length = 0
 
-    if ((a == b) && (d == c)) {
-        length = -1
-    } else if ((a == b) || (d == c)) length = 1
+    if (d >= b && a <= c) length = b - c
+    if (b >= d && c <= a) length = d - a
 
-    if (a <= c && b >= d) length = d - c
-
-    if (c <= a && d >= b) length = b - a
-
-    if (a <= c && c <= b && b <= d) length = b - c
-
-    if (c <= a && a <= d && d <= b) length = d - a
+    if (d >= b && c <= a) length = b - a
+    if (b >= d && a <= c) length = d - c
 
     if (b < c || d < a) length = -1
 
