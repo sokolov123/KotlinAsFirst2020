@@ -2,6 +2,7 @@
 
 package lesson3.task1
 
+import lesson1.task1.numberRevert
 import kotlin.math.sqrt
 
 // Урок 3: циклы
@@ -72,7 +73,17 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun digitNumber(n: Int): Int = TODO()
+fun digitNumber(n: Int): Int {
+    var i = 10
+    var counter = 1
+    while (n / i > 0 && counter < 10) {
+        if (n / i > 0) {
+            i = i * 10
+            counter++
+        }
+    }
+    return counter
+}
 
 /**
  * Простая (2 балла)
@@ -80,21 +91,44 @@ fun digitNumber(n: Int): Int = TODO()
  * Найти число Фибоначчи из ряда 1, 1, 2, 3, 5, 8, 13, 21, ... с номером n.
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
-fun fib(n: Int): Int = TODO()
+fun fib(n: Int): Int {
+    var number = 1
+
+    if (n == 1 || n == 2) return number // быстрее завершит программу если n маленькое
+
+    var a = 1 // это n-2 элемент последовательности
+    var b = 1 // а это n-1 элемент
+    var i = 3
+    while (i <= n) {
+        number = a + b
+        a = b
+        b = number
+        i++
+    }
+    return number
+}
 
 /**
  * Простая (2 балла)
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
-fun minDivisor(n: Int): Int = TODO()
+fun minDivisor(n: Int): Int {
+    var divider = 2
+    while (n % divider != 0) divider++
+    return divider
+}
 
 /**
  * Простая (2 балла)
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int = TODO()
+fun maxDivisor(n: Int): Int {
+    var divider = n - 1
+    while (n % divider != 0) divider--
+    return divider
+}
 
 /**
  * Простая (2 балла)
@@ -112,7 +146,14 @@ fun maxDivisor(n: Int): Int = TODO()
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var counter = 0
+    var a = x
+    while (x != 1) {
+
+    }
+    return counter
+}
 
 /**
  * Средняя (3 балла)

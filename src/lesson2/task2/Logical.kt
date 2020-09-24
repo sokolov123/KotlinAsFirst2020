@@ -50,7 +50,7 @@ fun daysInMonth(month: Int, year: Int): Int {
     when (month) {
         1, 3, 5, 7, 8, 10, 12 -> days = 31
         4, 6, 9, 11 -> days = 30
-        2 -> if (year % 100 == 0 && (year / 100) % 4 != 0) days = 28 else if (year % 4 == 0) days = 29 else days = 28
+        2 -> days = if (year % 100 == 0 && (year / 100) % 4 != 0) 28 else if (year % 4 == 0) 29 else 28
     }
     return days
 }
@@ -67,7 +67,7 @@ fun circleInside(
     x2: Double, y2: Double, r2: Double
 ): Boolean {
     val a = sqrt((abs(x1 - x2)).pow(2) + (abs(y1 - y2)).pow(2))
-    return (a + r1 <= r2)
+    return a + r1 <= r2
 }
 
 /**
@@ -83,5 +83,4 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     return ((a * b <= r * s) && ((a <= s && b <= r) || (a <= r && b <= s)) ||
             (a * c <= r * s) && ((a <= s && c <= r) || (a <= r && c <= s)) ||
             (c * b <= r * s) && ((c <= s && b <= r) || (c <= r && b <= s)))
-    // ух я надеюсь вы поймете где для чего скобки, просто они как раз для понятности происходящего (разграничения условий)
 }
