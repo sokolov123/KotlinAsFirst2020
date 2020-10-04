@@ -2,8 +2,12 @@
 
 package lesson3.task1
 
+import lesson1.task1.angleInRadian
 import lesson1.task1.numberRevert
+import lesson10.task1.parseExpr
+import kotlin.math.pow
 import kotlin.math.sqrt
+import kotlin.system.exitProcess
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -74,13 +78,12 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var i = 10
+    var i = n
     var counter = 1
-    while (n / i > 0 && counter < 10) {
-        if (n / i > 0) {
-            i = i * 10
-            counter++
-        }
+
+    while (i > 9 && counter < 10) {
+        i /= 10
+        counter++
     }
     return counter
 }
@@ -149,8 +152,10 @@ fun maxDivisor(n: Int): Int {
 fun collatzSteps(x: Int): Int {
     var counter = 0
     var a = x
-    while (x != 1) {
-
+    while (a != 1) {
+        if (a % 2 == 0) a /= 2
+        else a = 3 * a + 1
+        counter++
     }
     return counter
 }
@@ -161,7 +166,11 @@ fun collatzSteps(x: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int = TODO()
+fun lcm(m: Int, n: Int): Int {
+    var k = maxOf(m, n)
+    while ((k % m != 0) || (k % n != 0)) k++
+    return k
+}
 
 /**
  * Средняя (3 балла)
@@ -170,7 +179,19 @@ fun lcm(m: Int, n: Int): Int = TODO()
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+fun isCoPrime(m: Int, n: Int): Boolean {
+    val k = maxOf(m, n)
+    var divider = 2
+    var answer = true
+    while (divider <= k) {
+        if (m % divider == 0 && n % divider == 0) {
+            answer = false
+            break
+        }
+        divider++
+    }
+    return answer
+}
 
 /**
  * Средняя (3 балла)
@@ -179,7 +200,10 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
+fun squareBetweenExists(m: Int, n: Int): Boolean {
+    var k = ((sqrt(n * 1.0).toInt()) * 1.0).pow(2).toInt()
+    return k in m..n
+}
 
 /**
  * Средняя (3 балла)
@@ -188,7 +212,18 @@ fun squareBetweenExists(m: Int, n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var a = n
+    var i = 0
+    var num = 0
+    while (a > 0) {
+        i = a % 10
+        a /= 10
+        num = (num + i) * 10
+    }
+    num /= 10
+    return num
+}
 
 /**
  * Средняя (3 балла)
@@ -199,7 +234,26 @@ fun revert(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = TODO()
+fun isPalindrome(n: Int): Boolean {
+    var a = n
+    var i = 0
+    var answer = true
+    while (a > 0) {
+        i++
+        a /= 10
+    }
+    if (n == Int.MAX_VALUE) return false
+    else {
+        a = n
+        while (i > 0) {
+            if (a % 10 == a / (10.0.pow(i - 1)).toInt()) {
+                a = (a % (10.0.pow(i - 1)) / 10).toInt()
+                i--
+            } else answer = false
+        }
+    }
+    return answer
+}
 
 /**
  * Средняя (3 балла)
@@ -209,7 +263,32 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    var number = n
+    var t = 1
+    var a = 1
+    var b = 1
+    var answer = true
+
+    if (n < 10) answer = false
+    else {
+        b = number % 10
+        number /= 10
+        println("b $b")
+        println("number $number")
+        loop@ while (number > 0) {
+            a = number % 10
+            number /= 10
+            println("a $a")
+            println("number $number")
+            if (a == b) {
+                if (number == 0) answer = false
+                else continue@loop
+            } else break@loop
+        }
+    }
+    return answer
+}
 
 /**
  * Средняя (4 балла)
@@ -242,7 +321,40 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var numb = n
+    var i = 1
+    var counter = 0
+    var k = 1
+    var t = 1
+
+    while (k != 0) {
+        i *= i
+        t = i
+        while (t > 0) {
+            t /= 10
+            counter++
+        }
+        t = i
+        if (numb - counter > 0) numb -= counter
+        else {
+            while (k != 0) {
+                if (numb - 1 == 0) {
+                    numb = t / 10.0.pow(counter - 1).toInt()
+                    k = 0
+                } else {
+                    t %= 10.0.pow(counter - 1).toInt()
+                    numb--
+                    counter--
+                }
+            }
+        }
+        i = sqrt(i * 1.0).toInt() + 1
+        counter = 0
+    }
+    return numb
+}
+
 
 /**
  * Сложная (5 баллов)
@@ -253,4 +365,42 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var a = 1 // это n-2 элемент последовательности
+    var b = 1 // а это n-1 элемент
+    var k = 1
+    var i = 1 // n'ный элемент
+    var t = 1
+    var numb = n - 2
+    var counter = 0
+
+    if (n == 1 || n == 2) return 1
+
+    while (k != 0) {
+        i = a + b
+        a = b
+        b = i
+        t = b
+        counter = 0
+        while (t > 0) {
+            t /= 10
+            counter++
+        }
+        t = b
+        if (numb - counter > 0) {
+            numb -= counter
+        } else {
+            while (k != 0) {
+                if (numb - 1 == 0) {
+                    numb = t / 10.0.pow(counter - 1).toInt()
+                    k = 0
+                } else {
+                    t %= 10.0.pow(counter - 1).toInt()
+                    numb--
+                    counter--
+                }
+            }
+        }
+    }
+    return numb
+}
