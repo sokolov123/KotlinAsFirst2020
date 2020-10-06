@@ -2,12 +2,9 @@
 
 package lesson3.task1
 
-import lesson1.task1.angleInRadian
-import lesson1.task1.numberRevert
-import lesson10.task1.parseExpr
+import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.sqrt
-import kotlin.system.exitProcess
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -81,7 +78,7 @@ fun digitNumber(n: Int): Int {
     var i = n
     var counter = 1
 
-    while (i > 9 && counter < 10) {
+    while (abs(i) > 9) {
         i /= 10
         counter++
     }
@@ -117,9 +114,9 @@ fun fib(n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var divider = 2
-    while (n % divider != 0) divider++
-    return divider
+    val divider = sqrt(n / 1.0).toInt()
+    for (i in 2..divider) if (n % i == 0) return i
+    return n
 }
 
 /**
@@ -127,11 +124,7 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    var divider = n - 1
-    while (n % divider != 0) divider--
-    return divider
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая (2 балла)
@@ -274,13 +267,9 @@ fun hasDifferentDigits(n: Int): Boolean {
     else {
         b = number % 10
         number /= 10
-        println("b $b")
-        println("number $number")
         loop@ while (number > 0) {
             a = number % 10
             number /= 10
-            println("a $a")
-            println("number $number")
             if (a == b) {
                 if (number == 0) answer = false
                 else continue@loop
