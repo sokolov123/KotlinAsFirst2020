@@ -1,8 +1,9 @@
-@file:Suppress("UNUSED_PARAMETER")
+@file:Suppress("UNUSED_PARAMETER", "UNUSED_CHANGED_VALUE")
 
 package lesson3.task1
 
 import kotlin.math.abs
+import kotlin.math.log10
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -159,11 +160,7 @@ fun collatzSteps(x: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int {
-    var k = maxOf(m, n)
-    while ((k % m != 0) || (k % n != 0)) k++
-    return k
-}
+fun lcm(m: Int, n: Int): Int = TODO()
 
 /**
  * Средняя (3 балла)
@@ -194,7 +191,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var k = ((sqrt(n * 1.0).toInt()) * 1.0).pow(2).toInt()
+    val k = ((sqrt(n * 1.0).toInt()) * 1.0).pow(2).toInt()
     return k in m..n
 }
 
@@ -207,14 +204,12 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  */
 fun revert(n: Int): Int {
     var a = n
-    var i = 0
+    val i = log10(n * 1.0).toInt() + 1
     var num = 0
-    while (a > 0) {
-        i = a % 10
+    for (j in i downTo 1) {
+        num += (a % 10) * 10.0.pow(j - 1).toInt()
         a /= 10
-        num = (num + i) * 10
     }
-    num /= 10
     return num
 }
 
@@ -229,23 +224,18 @@ fun revert(n: Int): Int {
  */
 fun isPalindrome(n: Int): Boolean {
     var a = n
-    var i = 0
-    var answer = true
-    while (a > 0) {
-        i++
-        a /= 10
+    var b = 0
+    var i = log10(n * 1.0).toInt() + 1
+    if (i % 2 == 0) {
+        b = a % 10.0.pow(i / 2).toInt()
+        a /= 10.0.pow(i / 2).toInt()
+    } else {
+        b = a % 10.0.pow(i / 2).toInt()
+        a /= 10.0.pow(i / 2 + 1).toInt()
+        i--
     }
-    if (n == Int.MAX_VALUE) return false
-    else {
-        a = n
-        while (i > 0) {
-            if (a % 10 == a / (10.0.pow(i - 1)).toInt()) {
-                a = (a % (10.0.pow(i - 1)) / 10).toInt()
-                i--
-            } else answer = false
-        }
-    }
-    return answer
+    i = revert(b)
+    return a == i
 }
 
 /**
