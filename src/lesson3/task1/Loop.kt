@@ -223,19 +223,8 @@ fun revert(n: Int): Int {
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun isPalindrome(n: Int): Boolean {
-    var a = n
-    var b = 0
-    var i = log10(n * 1.0).toInt() + 1
-    if (i % 2 == 0) {
-        b = a % 10.0.pow(i / 2).toInt()
-        a /= 10.0.pow(i / 2).toInt()
-    } else {
-        b = a % 10.0.pow(i / 2).toInt()
-        a /= 10.0.pow(i / 2 + 1).toInt()
-        i--
-    }
-    i = revert(b)
-    return a == i
+    val i = revert(n)
+    return n == i
 }
 
 /**

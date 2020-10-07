@@ -189,6 +189,7 @@ class Tests {
     @Tag("3")
     fun isPalindrome() {
         assertTrue(isPalindrome(3))
+        assertTrue(isPalindrome(415020514))
         assertFalse(isPalindrome(3653))
         assertTrue(isPalindrome(15751))
         assertTrue(isPalindrome(24688642))
