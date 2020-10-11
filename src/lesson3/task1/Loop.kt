@@ -299,11 +299,7 @@ fun squareSequenceDigit(n: Int): Int {
     while (k != 0) {
         i *= i
         t = i
-        while (t > 0) {
-            t /= 10
-            counter++
-        }
-        t = i
+        counter = digitNumber(t)
         if (numb - counter > 0) numb -= counter
         else {
             while (k != 0) {
@@ -350,11 +346,7 @@ fun fibSequenceDigit(n: Int): Int {
         b = i
         t = b
         counter = 0
-        while (t > 0) {
-            t /= 10
-            counter++
-        }
-        t = b
+        counter = digitNumber(t)
         if (numb - counter > 0) {
             numb -= counter
         } else {
