@@ -2,10 +2,7 @@
 
 package lesson3.task1
 
-import kotlin.math.abs
-import kotlin.math.log10
-import kotlin.math.pow
-import kotlin.math.sqrt
+import kotlin.math.*
 
 // Урок 3: циклы
 // Максимальное количество баллов = 9
@@ -170,7 +167,7 @@ fun lcm(m: Int, n: Int): Int = TODO()
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    val k = maxOf(m, n)
+    val k = minOf(m, n)
     var divider = 2
     var answer = true
     while (divider <= k) {
@@ -190,10 +187,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * то есть, существует ли такое целое k, что m <= k*k <= n.
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
-fun squareBetweenExists(m: Int, n: Int): Boolean {
-    val k = ((sqrt(n * 1.0).toInt()) * 1.0).pow(2).toInt()
-    return k in m..n
-}
+fun squareBetweenExists(m: Int, n: Int): Boolean = (floor(sqrt(n * 1.0)) * 1.0).pow(2).toInt() in m..n
 
 /**
  * Средняя (3 балла)
@@ -204,7 +198,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  */
 fun revert(n: Int): Int {
     var a = n
-    val i = log10(n * 1.0).toInt() + 1
+    val i = digitNumber(n)
     var num = 0
     for (j in i downTo 1) {
         num += (a % 10) * 10.0.pow(j - 1).toInt()
@@ -222,10 +216,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    val i = revert(n)
-    return n == i
-}
+fun isPalindrome(n: Int): Boolean = revert(n) == n
 
 /**
  * Средняя (3 балла)
@@ -251,7 +242,6 @@ fun hasDifferentDigits(n: Int): Boolean {
             number /= 10
             if (a == b) {
                 if (number == 0) answer = false
-                else continue@loop
             } else break@loop
         }
     }
@@ -293,19 +283,19 @@ fun squareSequenceDigit(n: Int): Int {
     var numb = n
     var i = 1
     var counter = 0
-    var k = 1
+    var k = true
     var t = 1
 
-    while (k != 0) {
+    while (k) {
         i *= i
         t = i
         counter = digitNumber(t)
         if (numb - counter > 0) numb -= counter
         else {
-            while (k != 0) {
+            while (k) {
                 if (numb - 1 == 0) {
                     numb = t / 10.0.pow(counter - 1).toInt()
-                    k = 0
+                    k = false
                 } else {
                     t %= 10.0.pow(counter - 1).toInt()
                     numb--
