@@ -3,6 +3,14 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.quadraticEquationRoot
+import lesson1.task1.sqr
+import lesson3.task1.digitNumber
+import lesson3.task1.revert
+import lesson6.task1.fromRoman
+import java.lang.StringBuilder
+import kotlin.math.log10
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 // Урок 4: списки
@@ -120,7 +128,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = TODO()
+fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sumByDouble { it })
 
 /**
  * Простая (2 балла)
@@ -241,7 +249,36 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val numbers = listOf("I", "V", "X", "L", "C", "D", "M")
+    var result = ""
+    var a = n
+    var divider = 100
+    var j = 4
+
+    if (a / 1000 > 0) // для начала записываю в result тысячи
+        for (i in 1..(a / 1000))
+            result += numbers[6]
+    a %= 1000
+
+    while (j > -1) { // теперь остальные цифры по основному алгоритму
+        when (a / divider) {
+            1, 2, 3 -> for (i in 1..(a / divider)) result += numbers[j]
+            4 -> result += numbers[j] + numbers[j + 1]
+            5 -> result += numbers[j + 1]
+            6, 7, 8 -> {
+                result += numbers[j + 1]
+                for (i in 1..(a / divider - 5)) result += numbers[j]
+            }
+            9 -> result += numbers[j] + numbers[j + 2]
+            else -> result += ""
+        }
+        a %= divider
+        divider /= 10
+        j -= 2
+    }
+    return result
+}
 
 /**
  * Очень сложная (7 баллов)
@@ -250,4 +287,117 @@ fun roman(n: Int): String = TODO()
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+    var i = digitNumber(n)
+    var numb = ""
+    var j = 0
+    var a = n
+    val units = listOf(
+        "",
+        "один ",
+        "два ",
+        "три ",
+        "четыре ",
+        "пять ",
+        "шесть ",
+        "семь ",
+        "восемь ",
+        "девять ",
+        "ноль",
+        "одна ",
+        "две "
+    )
+    val decades = listOf(
+        "",
+        "",
+        "двадцать ",
+        "тридцать ",
+        "сорок ",
+        "пятдесят ",
+        "шестьдесят ",
+        "семьдесят ",
+        "восемьдесят ",
+        "девяносто ",
+        "десять ",
+        "одиннадцать ",
+        "двенадцать ",
+        "тринадцать ",
+        "четырнадцать ",
+        "пятнадцать ",
+        "шестнадцать ",
+        "семнадцать ",
+        "восемнадцать ",
+        "девятнадцать "
+    )
+    val hundreds = listOf(
+        "",
+        "сто ",
+        "двести ",
+        "триста ",
+        "четыресто ",
+        "пятьсот ",
+        "шестьсот ",
+        "семьсот ",
+        "восемьсот ",
+        "девятьсот "
+    )
+    val auxiliary = listOf(
+        "тысяча ",
+        "тысячи ",
+        "тысяч ",
+    )
+
+    if (n == 0) numb = units[10]
+    else {
+        loop@ while (i > 0) {
+            if (i > 3) {
+                j = 1
+                i -= 3
+                a /= 1000
+            }
+            while (i == 3) {
+                numb += hundreds[a / 100]
+                i--
+                a %= 100
+            }
+            while (i == 2) {
+                if (a / 10 == 1) {
+                    numb += decades[a]
+                    i = 0
+                } else {
+                    numb += decades[a / 10]
+                    i--
+                    a %= 10
+                }
+            }
+            while (i == 1) {
+                numb += if (j == 1) {
+                    when (a) {
+                        1, 2 -> {
+                            when (a) {
+                                1 -> units[11]
+                                2 -> units[12]
+                                else -> units[a]
+                            }
+                        }
+                        else -> units[a]
+                    }
+                } else units[a]
+                i = 0
+            }
+            if (j == 1) {
+                numb += when (a) {
+                    1 -> auxiliary[0]
+                    2, 3, 4 -> auxiliary[1]
+                    else -> auxiliary[2]
+                }
+                j = 0
+                i = 3
+                a = n % 1000
+                continue@loop
+            }
+            i = -1
+        }
+    }
+    return numb.trim()
+}
