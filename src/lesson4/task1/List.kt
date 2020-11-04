@@ -128,7 +128,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sumByDouble { it })
+fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sum())
 
 /**
  * Простая (2 балла)
@@ -257,13 +257,12 @@ fun roman(n: Int): String {
     var j = 4
 
     if (a / 1000 > 0) // для начала записываю в result тысячи
-        for (i in 1..(a / 1000))
-            result += numbers[6]
+        result += numbers[6].repeat(a / 1000)
     a %= 1000
 
     while (j > -1) { // теперь остальные цифры по основному алгоритму
         when (a / divider) {
-            1, 2, 3 -> for (i in 1..(a / divider)) result += numbers[j]
+            1, 2, 3 -> result += numbers[j].repeat(a / divider)
             4 -> result += numbers[j] + numbers[j + 1]
             5 -> result += numbers[j + 1]
             6, 7, 8 -> {
@@ -271,13 +270,56 @@ fun roman(n: Int): String {
                 for (i in 1..(a / divider - 5)) result += numbers[j]
             }
             9 -> result += numbers[j] + numbers[j + 2]
-            else -> result += ""
         }
         a %= divider
         divider /= 10
         j -= 2
     }
     return result
+}
+
+fun forRussianHelp(b: Int, j: Boolean): String {
+    var numb = ""
+    var a = b
+    var i = digitNumber(b)
+    val units = listOf(
+        "", "один ", "два ", "три ", "четыре ", "пять ", "шесть ",
+        "семь ", "восемь ", "девять ", "ноль", "одна ", "две "
+    )
+    val decades = listOf(
+        "", "", "двадцать ", "тридцать ", "сорок ", "пятьдесят ", "шестьдесят ", "семьдесят ", "восемьдесят ",
+        "девяносто ", "десять ", "одиннадцать ", "двенадцать ", "тринадцать ", "четырнадцать ", "пятнадцать ",
+        "шестнадцать ", "семнадцать ", "восемнадцать ", "девятнадцать "
+    )
+    val hundreds = listOf(
+        "", "сто ", "двести ", "триста ", "четыреста ", "пятьсот ", "шестьсот ", "семьсот ", "восемьсот ", "девятьсот "
+    )
+
+    if (i == 3) {
+        numb += hundreds[a / 100]
+        i--
+        a %= 100
+    }
+    if (i == 2) {
+        if (a / 10 == 1) {
+            numb += decades[a]
+            i = 0
+        } else {
+            numb += decades[a / 10]
+            i--
+            a %= 10
+        }
+    }
+    if (i == 1) {
+        numb += if (j) {
+            when (a) {
+                1 -> units[11]
+                2 -> units[12]
+                else -> units[a]
+            }
+        } else units[a]
+    }
+    return numb
 }
 
 /**
@@ -288,115 +330,30 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-    var i = digitNumber(n)
     var numb = ""
-    var j = 0
     var a = n
-    val units = listOf(
-        "",
-        "один ",
-        "два ",
-        "три ",
-        "четыре ",
-        "пять ",
-        "шесть ",
-        "семь ",
-        "восемь ",
-        "девять ",
-        "ноль",
-        "одна ",
-        "две "
-    )
-    val decades = listOf(
-        "",
-        "",
-        "двадцать ",
-        "тридцать ",
-        "сорок ",
-        "пятьдесят ",
-        "шестьдесят ",
-        "семьдесят ",
-        "восемьдесят ",
-        "девяносто ",
-        "десять ",
-        "одиннадцать ",
-        "двенадцать ",
-        "тринадцать ",
-        "четырнадцать ",
-        "пятнадцать ",
-        "шестнадцать ",
-        "семнадцать ",
-        "восемнадцать ",
-        "девятнадцать "
-    )
-    val hundreds = listOf(
-        "",
-        "сто ",
-        "двести ",
-        "триста ",
-        "четыреста ",
-        "пятьсот ",
-        "шестьсот ",
-        "семьсот ",
-        "восемьсот ",
-        "девятьсот "
-    )
-    val auxiliary = listOf(
-        "тысяча ",
-        "тысячи ",
-        "тысяч ",
-    )
-
-    if (n == 0) numb = units[10]
+    var j = false
+    val auxiliary = listOf("тысяча ", "тысячи ", "тысяч ")
+    if (n == 0) return "ноль"
     else {
-        loop@ while (i > 0) {
-            if (i > 3) {
-                j = 1
-                i -= 3
-                a /= 1000
+        if (digitNumber(n) > 3) {
+            a = n / 1000
+            j = true
+            numb += forRussianHelp(a, j)
+        } else {
+            numb += forRussianHelp(a, j)
+            return numb.trim()
+        }
+
+        if (j) {
+            numb += when (n / 1000 % 10) {
+                1 -> auxiliary[0]
+                2, 3, 4 -> auxiliary[1]
+                else -> auxiliary[2]
             }
-            while (i == 3) {
-                numb += hundreds[a / 100]
-                i--
-                a %= 100
-            }
-            while (i == 2) {
-                if (a / 10 == 1) {
-                    numb += decades[a]
-                    i = 0
-                } else {
-                    numb += decades[a / 10]
-                    i--
-                    a %= 10
-                }
-            }
-            while (i == 1) {
-                numb += if (j == 1) {
-                    when (a) {
-                        1, 2 -> {
-                            when (a) {
-                                1 -> units[11]
-                                2 -> units[12]
-                                else -> units[a]
-                            }
-                        }
-                        else -> units[a]
-                    }
-                } else units[a]
-                i = 0
-            }
-            if (j == 1) {
-                numb += when (a) {
-                    1 -> auxiliary[0]
-                    2, 3, 4 -> auxiliary[1]
-                    else -> auxiliary[2]
-                }
-                j = 0
-                i = 3
-                a = n % 1000
-                continue@loop
-            }
-            i = -1
+            a = n % 1000
+            j = false
+            numb += forRussianHelp(a, j)
         }
     }
     return numb.trim()
