@@ -346,10 +346,13 @@ fun russian(n: Int): String {
         }
 
         if (j) {
-            numb += when (n / 1000 % 10) {
-                1 -> auxiliary[0]
-                2, 3, 4 -> auxiliary[1]
-                else -> auxiliary[2]
+            numb += if (n / 10000 % 10 == 1) auxiliary[2]
+            else {
+                when (n / 1000 % 10) {
+                    1 -> auxiliary[0]
+                    2, 3, 4 -> auxiliary[1]
+                    else -> auxiliary[2]
+                }
             }
             a = n % 1000
             j = false
