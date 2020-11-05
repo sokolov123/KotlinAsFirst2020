@@ -2,6 +2,10 @@
 
 package lesson5.task1
 
+import kotlinx.html.I
+import lesson1.task1.seconds
+import ru.spbstu.kotlin.typeclass.kind
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -277,7 +281,20 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    var result = Pair(-1, -1)
+    list.filter { it > number } // отсекаю переборку лишних цифр
+    loop@ for (i in list.indices) {
+        val n = number - list[i]
+        if (n in list)
+            for (t in (i + 1) until list.size)
+                if (list[t] == n) {
+                    result = i to t
+                    break@loop
+                }
+    }
+    return result
+}
 
 /**
  * Очень сложная (8 баллов)
@@ -300,4 +317,22 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    // создам map где буду хранить название сокровища и его коэффициэнт цены за у.е. веса,
+    // и брать ,естественно, буду самое ценное из того, что влезет в рюкзак
+
+    val set = mutableSetOf<String>()
+    var prise = mutableMapOf<String, Int>()
+    var copy = capacity // копия capacity чтобы дальше можно было с ним работать
+    for ((key, values) in treasures)
+        prise[key] = treasures[key]!!.second / treasures[key]!!.first
+    val k = prise.toList().sortedByDescending { (_, value) -> value }.toMap()
+    // в строчке выше ставлю сокровища по порядку убывания цены, чтобы изначально брать самое ценное
+    for ((key, values) in k) {
+        if (treasures[key]!!.first <= copy) {
+            copy -= treasures[key]!!.first
+            set.add(key)
+        }
+    }
+    return set
+}
