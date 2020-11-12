@@ -288,8 +288,10 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     for (i in list.indices)
         if (list[i] <= number) additional[list[i]] = i
     for ((key, element) in additional)
-        if ((number - key) in additional.keys && additional[(number - key)] != element)
-            result = element to additional[(number - key)]!!
+        for (i in list.indices)
+            if (i != element)
+                if (list[i] + key == number)
+                    result = element to i
     return result.sorted()
 }
 
