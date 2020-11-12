@@ -5,6 +5,7 @@ package lesson5.task1
 import kotlinx.html.I
 import lesson1.task1.seconds
 import ru.spbstu.kotlin.typeclass.kind
+import ru.spbstu.wheels.sorted
 
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
@@ -283,17 +284,13 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var result = Pair(-1, -1)
-    list.filter { it > number } // отсекаю переборку лишних цифр
-    loop@ for (i in list.indices) {
-        val n = number - list[i]
-        if (n in list)
-            for (t in (i + 1) until list.size)
-                if (list[t] == n) {
-                    result = i to t
-                    break@loop
-                }
-    }
-    return result
+    val additional = mutableMapOf<Int, Int>()
+    for (i in list.indices)
+        if (list[i] <= number) additional[list[i]] = i
+    for ((key, element) in additional)
+        if ((number - key) in additional.keys && additional[(number - key)] != element)
+            result = element to additional[(number - key)]!!
+    return result.sorted()
 }
 
 /**
@@ -317,22 +314,4 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    // создам map где буду хранить название сокровища и его коэффициэнт цены за у.е. веса,
-    // и брать ,естественно, буду самое ценное из того, что влезет в рюкзак
-
-    val set = mutableSetOf<String>()
-    var prise = mutableMapOf<String, Int>()
-    var copy = capacity // копия capacity чтобы дальше можно было с ним работать
-    for ((key, values) in treasures)
-        prise[key] = treasures[key]!!.second / treasures[key]!!.first
-    val k = prise.toList().sortedByDescending { (_, value) -> value }.toMap()
-    // в строчке выше ставлю сокровища по порядку убывания цены, чтобы изначально брать самое ценное
-    for ((key, values) in k) {
-        if (treasures[key]!!.first <= copy) {
-            copy -= treasures[key]!!.first
-            set.add(key)
-        }
-    }
-    return set
-}
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()

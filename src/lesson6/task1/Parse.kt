@@ -2,6 +2,9 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+import java.lang.NumberFormatException
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -74,7 +77,27 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    val date = str.split(" ")
+    val month = when (date[1]) {
+        "января" -> 1
+        "февраля" -> 2
+        "марта" -> 3
+        "апреля" -> 4
+        "мая" -> 5
+        "июня" -> 6
+        "июля" -> 7
+        "августа" -> 8
+        "сентября" -> 9
+        "октября" -> 10
+        "ноября" -> 11
+        "декабря" -> 12
+        else -> -1
+    }
+    if (month == -1) return ""
+    else if (date[0].toInt() > daysInMonth(month, date[2].toInt())) return ""
+    return String.format("%02d.%02d.%04d", date[0].toInt(), month, date[2].toInt())
+}
 
 /**
  * Средняя (4 балла)
@@ -127,7 +150,19 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    val n = jumps.split(" ")
+    var number = 0
+    for (i in 0..n.size - 2)
+        try {
+            if (n[i].toInt() > number && n[i + 1] == "+") number = n[i].toInt()
+            else continue
+        } catch (e: NumberFormatException) {
+            continue
+        }
+    return if (number == 0) -1
+    else number
+}
 
 /**
  * Сложная (6 баллов)
@@ -138,7 +173,24 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    val n = expression.split(" ")
+    var number = n[0].toInt()
+    for (i in n.indices step 2) {
+        try {
+            if ("+" in n[i] || "-" in n[i]) throw IllegalArgumentException("")
+            else
+                if (i < n.size - 1)
+                    when (n[i + 1]) {
+                        "+" -> number += n[i + 2].toInt()
+                        "-" -> number -= n[i + 2].toInt()
+                    }
+        } catch (e: NumberFormatException) {
+            throw IllegalArgumentException("")
+        }
+    }
+    return number
+}
 
 /**
  * Сложная (6 баллов)
