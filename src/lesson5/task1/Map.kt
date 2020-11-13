@@ -3,6 +3,7 @@
 package lesson5.task1
 
 import kotlinx.html.I
+import lesson1.task1.lengthInMeters
 import lesson1.task1.seconds
 import ru.spbstu.kotlin.typeclass.kind
 import ru.spbstu.wheels.sorted
@@ -284,14 +285,9 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     var result = Pair(-1, -1)
-    val additional = mutableMapOf<Int, Int>()
     for (i in list.indices)
-        if (list[i] <= number) additional[list[i]] = i
-    for ((key, element) in additional)
-        for (i in list.indices)
-            if (i != element)
-                if (list[i] + key == number)
-                    result = element to i
+        if (number - list[i] in list && list.lastIndexOf(number - list[i]) != i)
+            result = i to list.lastIndexOf(number - list[i])
     return result.sorted()
 }
 
