@@ -172,7 +172,8 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   averageStockPrice(listOf("MSFT" to 100.0, "MSFT" to 200.0, "NFLX" to 40.0))
  *     -> mapOf("MSFT" to 150.0, "NFLX" to 40.0)
  */
-fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
+fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> =
+    stockPrices.groupBy { it.first }.mapValues { it.value.sumByDouble { it.second } / it.value.size }
 
 /**
  * Средняя (4 балла)
@@ -312,18 +313,4 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val canBeCarried = mutableSetOf<String>()
-    var cost = 0
-    for ((key, values) in treasures)
-        if (values.first <= capacity && cost == 0) {
-            cost = values.first * values.second
-            canBeCarried.add(key)
-        } else
-            if (values.first <= capacity && values.first * values.second > cost) {
-                cost = values.first * values.second
-                canBeCarried.clear()
-                canBeCarried.add(key)
-            }
-    return canBeCarried
-}
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
