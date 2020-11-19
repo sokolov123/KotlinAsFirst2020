@@ -2,6 +2,7 @@
 
 package lesson6.task1
 
+import lesson1.task1.accountInThreeYears
 import lesson2.task2.daysInMonth
 import java.lang.NumberFormatException
 
@@ -135,7 +136,7 @@ fun bestHighJump(jumps: String): Int {
     var number = -1
     for (i in 0..n.size - 2)
         try {
-            if (n[i + 1] == "+" && n[i].toInt() > number)
+            if (Regex("""(\d)+\+""").matches(n[i] + n[i + 1]) && n[i].toInt() > number)
                 number = n[i].toInt()
         } catch (e: NumberFormatException) {
             break
@@ -153,22 +154,19 @@ fun bestHighJump(jumps: String): Int {
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    val n = expression.split(" ")
-    var number = n[0].toInt()
-    for (i in n.indices step 2) {
-        try {
-            if ("+" in n[i] || "-" in n[i]) throw IllegalArgumentException("")
-            else
-                if (i < n.size - 1)
-                    when (n[i + 1]) {
-                        "+" -> number += n[i + 2].toInt()
-                        "-" -> number -= n[i + 2].toInt()
-                    }
-        } catch (e: NumberFormatException) {
-            throw IllegalArgumentException("")
+    val numbers = expression.split(' ')
+    var n = 1
+    var result = 0
+    if (Regex("""(\d+\s[+-]\s)*\d+""").matches(expression)) {
+        for (i in numbers) {
+            when (i) {
+                "+" -> n = 1
+                "-" -> n = -1
+                else -> result += i.toInt() * n
+            }
         }
-    }
-    return number
+        return result
+    } else throw IllegalArgumentException("")
 }
 
 /**
