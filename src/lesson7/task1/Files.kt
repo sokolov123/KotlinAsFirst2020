@@ -2,8 +2,12 @@
 
 package lesson7.task1
 
+import lesson2.task2.queenThreatens
+import lesson3.task1.digitNumber
 import lesson5.task1.canBuildFrom
 import java.io.File
+import kotlin.math.pow
+import kotlin.math.sign
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -537,6 +541,67 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    TODO()
+    val resultDel = (lhv / rhv).toString()
+    var whereFrom = 0
+    var n = 0
+    var space = 0
+    var remains = 0
+
+    File(outputName).bufferedWriter().use {
+        for (i in resultDel.indices) {
+
+            val m = if (resultDel[i].toInt() > 96) resultDel[i].toInt() - 87
+            else resultDel[i].toInt() - 48
+
+            val subtrahend = rhv * m // вычитаемое
+
+            if (i == 0) remains = when (i) {
+                0 -> lhv / 10.0.pow(digitNumber(lhv) - digitNumber(subtrahend)).toInt() - subtrahend
+                else -> 0
+            }
+
+            space += (digitNumber(whereFrom) - digitNumber(remains))
+
+            if (i == 0) for (j in digitNumber(lhv) - 1 downTo 0)
+                if (lhv / 10.0.pow(j).toInt() - subtrahend < 0) space++
+                else {
+                    n = j
+                    if (digitNumber(subtrahend) == digitNumber(lhv) - j) {
+                        it.write(" ")
+                        space++
+                    }
+                    it.write(
+                        "$lhv | $rhv\n-$subtrahend${" ".repeat(j + 3)}$resultDel" +
+                                "\n${"-".repeat(digitNumber(subtrahend) + 1)}"
+                    ) // не знаю насколько такой перенос выглдит красиво, идея говорит так делать ¯\_(ツ)_/¯
+                    whereFrom = remains
+                    break
+                }
+            else {
+                it.write("\n${" ".repeat(space)}")
+                whereFrom = if (whereFrom - subtrahend == 0) (lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt()
+                else (whereFrom * 10) + ((lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt())
+                n--
+                if (remains == 0) {
+                    it.write("0$whereFrom")
+                    space++
+                } else it.write("$whereFrom")
+
+                if (digitNumber(subtrahend) == digitNumber(whereFrom)) it.write(
+                    "\n${" ".repeat(space - 1)}-$subtrahend" +
+                            "\n${" ".repeat(space - 1)}${"-".repeat(digitNumber(subtrahend) + 1)}"
+                )
+                else {
+                    it.write(
+                        "\n${" ".repeat(space)}-$subtrahend" +
+                                "\n${" ".repeat(space)}${"-".repeat(digitNumber(subtrahend) + 1)}"
+                    )
+                }
+                remains = whereFrom - subtrahend
+                if (whereFrom == 0) whereFrom = (whereFrom * 10) + ((lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt()) / 10
+            }
+        }
+        it.write("\n${" ".repeat(space + digitNumber(whereFrom) - digitNumber(lhv % rhv))}${lhv % rhv}")
+    }
 }
 
