@@ -601,7 +601,8 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                 }
                 remains = whereFrom - subtrahend
                 if (whereFrom == 0) whereFrom =
-                    (whereFrom * 10) + ((lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt()) / 10
+                    if (subtrahend == 0) ((lhv % 10.0.pow(n + 1).toInt()) / 10.0.pow(n).toInt()) / 10
+                    else ((lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt()) / 10
             }
         }
         it.write("\n${" ".repeat(space + digitNumber(whereFrom) - digitNumber(lhv % rhv))}${lhv % rhv}")
