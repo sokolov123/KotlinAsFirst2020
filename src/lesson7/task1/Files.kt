@@ -320,7 +320,7 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 
         for ((int, str) in File(inputName).readLines().withIndex()) {
             if (str.isEmpty()) {
-                it.write("\n${valuesList[9]}\n${valuesList[2]}")
+                if (int != 0) it.write("\n${valuesList[9]}\n${valuesList[2]}")
                 it.newLine()
             }
             for ((number, symbol) in str.withIndex())
