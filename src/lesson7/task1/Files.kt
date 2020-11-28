@@ -579,11 +579,13 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                 }
             else {
                 it.write("\n${" ".repeat(space)}")
-                whereFrom = if (whereFrom - subtrahend == 0) (lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt()
-                else (whereFrom * 10) + ((lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt())
+                whereFrom =
+                    if (whereFrom - subtrahend == 0) (lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt()
+                    else (whereFrom * 10) + ((lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt())
                 n--
                 if (remains == 0) {
-                    it.write("0$whereFrom")
+                    if (digitNumber(whereFrom) > 1) space--
+                    it.write("0${whereFrom % 10}")
                     space++
                 } else it.write("$whereFrom")
 
@@ -598,7 +600,8 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                     )
                 }
                 remains = whereFrom - subtrahend
-                if (whereFrom == 0) whereFrom = (whereFrom * 10) + ((lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt()) / 10
+                if (whereFrom == 0) whereFrom =
+                    (whereFrom * 10) + ((lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt()) / 10
             }
         }
         it.write("\n${" ".repeat(space + digitNumber(whereFrom) - digitNumber(lhv % rhv))}${lhv % rhv}")
