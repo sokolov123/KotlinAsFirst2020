@@ -541,71 +541,89 @@ fun printMultiplicationProcess(lhv: Int, rhv: Int, outputName: String) {
  *
  */
 fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
-    val resultDel = (lhv / rhv).toString()
-    var whereFrom = 0
-    var n = 0
-    var space = 0
-    var remains = 0
-
     File(outputName).bufferedWriter().use {
-        for (i in resultDel.indices) {
+
+        val resultDel = (lhv / rhv).toString()
+        var otkuda = 0
+        var n = 2
+        var space = 0
+        var ostatok = 1
+        var wichetaemoe = 0
+
+        for (i in 0..resultDel.length - 1) {
+
+            var t = false
 
             val m = if (resultDel[i].toInt() > 96) resultDel[i].toInt() - 87
             else resultDel[i].toInt() - 48
 
-            val subtrahend = rhv * m // вычитаемое
+            wichetaemoe = rhv * m // вычитаемое
 
-            if (i == 0) remains = when (i) {
-                0 -> lhv / 10.0.pow(digitNumber(lhv) - digitNumber(subtrahend)).toInt() - subtrahend
-                else -> 0
+            if (ostatok == 0) {
+                t = true
             }
 
-            space += (digitNumber(whereFrom) - digitNumber(remains))
+            otkuda = if (n == 1) (ostatok * 10) + ((lhv % 10.0.pow(n).toInt()))
+            else (ostatok * 10) + ((lhv % 10.0.pow(n).toInt()) / (10.0.pow(n - 1).toInt()))
 
-            if (i == 0) for (j in digitNumber(lhv) - 1 downTo 0)
-                if (lhv / 10.0.pow(j).toInt() - subtrahend < 0) space++
-                else {
-                    n = j
-                    if (digitNumber(subtrahend) == digitNumber(lhv) - j) {
-                        it.write(" ")
-                        space++
-                    }
-                    it.write(
-                        "$lhv | $rhv\n-$subtrahend${" ".repeat(j + 3)}$resultDel" +
-                                "\n${"-".repeat(digitNumber(subtrahend) + 1)}"
-                    ) // не знаю насколько такой перенос выглдит красиво, идея говорит так делать ¯\_(ツ)_/¯
-                    whereFrom = remains
-                    break
-                }
-            else {
-                it.write("\n${" ".repeat(space)}")
-                whereFrom =
-                    if (whereFrom - subtrahend == 0) (lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt()
-                    else (whereFrom * 10) + ((lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt())
-                n--
-                if (remains == 0) {
-                    if (digitNumber(whereFrom) > 1) space--
-                    it.write("0${whereFrom % 10}")
+            n--
+
+            if (i == 0) {
+
+                otkuda = lhv / 10.0.pow(digitNumber(lhv) - digitNumber(wichetaemoe)).toInt()
+
+                ostatok = otkuda - wichetaemoe
+
+                if (digitNumber(otkuda) == digitNumber(wichetaemoe)) {
+                    it.write(" ")
                     space++
-                } else it.write("$whereFrom")
-
-                if (digitNumber(subtrahend) == digitNumber(whereFrom)) it.write(
-                    "\n${" ".repeat(space - 1)}-$subtrahend" +
-                            "\n${" ".repeat(space - 1)}${"-".repeat(digitNumber(subtrahend) + 1)}"
-                )
-                else {
-                    it.write(
-                        "\n${" ".repeat(space)}-$subtrahend" +
-                                "\n${" ".repeat(space)}${"-".repeat(digitNumber(subtrahend) + 1)}"
-                    )
                 }
-                remains = whereFrom - subtrahend
-                if (whereFrom == 0) whereFrom =
-                    if (subtrahend == 0) ((lhv % 10.0.pow(n + 1).toInt()) / 10.0.pow(n).toInt()) / 10
-                    else ((lhv % 10.0.pow(n).toInt()) / 10.0.pow(n - 1).toInt()) / 10
+
+                it.write(
+                    "$lhv | $rhv\n-$wichetaemoe${" ".repeat(digitNumber(lhv) - digitNumber(wichetaemoe) + 3)}" +
+                            "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}"
+                )
+
+                n = digitNumber(lhv) - digitNumber(wichetaemoe)
+                space += (digitNumber(wichetaemoe) - digitNumber(ostatok))
+
+            } else {
+
+                if (digitNumber(wichetaemoe) - digitNumber(ostatok) != 0 || i == 1)
+                    space += (digitNumber(wichetaemoe) - digitNumber(ostatok))
+                else space++
+
+                ostatok = otkuda - wichetaemoe
+
+                it.write("\n${" ".repeat(space)}")
+
+                if (t) {
+                    it.write("0")
+                    space++
+                    t = false
+                }
+
+                if (digitNumber(otkuda) == digitNumber(wichetaemoe)) {
+                    space--
+                    it.write(
+                        "$otkuda\n${" ".repeat(space)}-$wichetaemoe" +
+                                "\n${" ".repeat(space)}${"-".repeat(digitNumber(wichetaemoe) + 1)}"
+                    )
+                    t = true
+                }
+
+                if (!t && digitNumber(otkuda) == digitNumber(ostatok)) {
+                    it.write(
+                        "$otkuda\n${" ".repeat(space)}-$wichetaemoe" +
+                                "\n${" ".repeat(space)}${"-".repeat(digitNumber(wichetaemoe) + 1)}"
+                    )
+                    space--
+                }
             }
+
         }
-        it.write("\n${" ".repeat(space + digitNumber(whereFrom) - digitNumber(lhv % rhv))}${lhv % rhv}")
+        if (digitNumber(otkuda) == digitNumber(wichetaemoe) && digitNumber(lhv) > 1) space++
+        it.write("\n${" ".repeat(space)}${" ".repeat(digitNumber(otkuda) - digitNumber(ostatok))}$ostatok")
     }
 }
 
