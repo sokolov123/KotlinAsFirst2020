@@ -550,7 +550,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         var ostatok = 1
         var wichetaemoe = 0
 
-        for (i in 0..resultDel.length - 1) {
+        for (i in resultDel.indices) {
 
             var t = false
 
@@ -585,7 +585,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                 )
 
                 n = digitNumber(lhv) - digitNumber(wichetaemoe)
-                space += (digitNumber(wichetaemoe) - digitNumber(ostatok))
+                if (resultDel.length > 1) space += (digitNumber(wichetaemoe) - digitNumber(ostatok))
 
             } else {
 
@@ -622,7 +622,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
             }
 
         }
-        if (digitNumber(otkuda) == digitNumber(wichetaemoe) && digitNumber(lhv) > 1) space++
+        if (digitNumber(otkuda) == digitNumber(wichetaemoe) && resultDel.length > 1) space++
         it.write("\n${" ".repeat(space)}${" ".repeat(digitNumber(otkuda) - digitNumber(ostatok))}$ostatok")
     }
 }
