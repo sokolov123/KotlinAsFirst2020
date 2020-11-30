@@ -581,49 +581,46 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
                 it.write(
                     "$lhv | $rhv\n-$wichetaemoe${" ".repeat(digitNumber(lhv) - digitNumber(wichetaemoe) + 3)}" +
-                            "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}"
+                            "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}" +
+                            "\n${" ".repeat(digitNumber(wichetaemoe))}$ostatok"
                 )
 
                 n = digitNumber(lhv) - digitNumber(wichetaemoe)
                 if (resultDel.length > 1) space += (digitNumber(wichetaemoe) - digitNumber(ostatok))
 
             } else {
-
-                if (digitNumber(wichetaemoe) - digitNumber(ostatok) != 0 || i == 1)
-                    space += (digitNumber(wichetaemoe) - digitNumber(ostatok))
-                else space++
+                it.write("${otkuda % 10}")
 
                 ostatok = otkuda - wichetaemoe
 
-                it.write("\n${" ".repeat(space)}")
-
                 if (t) {
-                    it.write("0")
                     space++
                     t = false
                 }
 
+                space += (digitNumber(wichetaemoe) - digitNumber(wichetaemoe))
+
                 if (digitNumber(otkuda) == digitNumber(wichetaemoe)) {
-                    space--
                     it.write(
-                        "$otkuda\n${" ".repeat(space)}-$wichetaemoe" +
-                                "\n${" ".repeat(space)}${"-".repeat(digitNumber(wichetaemoe) + 1)}"
+                        "\n${" ".repeat(space - 1)}-$wichetaemoe\n${" ".repeat(space - 1)}${"-".repeat(
+                            digitNumber(
+                                wichetaemoe
+                            ) + 1
+                        )}\n${" ".repeat(space + digitNumber(otkuda) - digitNumber(ostatok))}$ostatok"
                     )
-                    t = true
+                } else {
+                    it.write(
+                        "\n${" ".repeat(space)}-$wichetaemoe\n${" ".repeat(space)}${"-".repeat(
+                            digitNumber(
+                                wichetaemoe
+                            ) + 1
+                        )}\n${" ".repeat(space + digitNumber(otkuda) - digitNumber(ostatok))}$ostatok"
+                    )
                 }
 
-                if (!t && digitNumber(otkuda) == digitNumber(ostatok)) {
-                    it.write(
-                        "$otkuda\n${" ".repeat(space)}-$wichetaemoe" +
-                                "\n${" ".repeat(space)}${"-".repeat(digitNumber(wichetaemoe) + 1)}"
-                    )
-                    space--
-                }
+
             }
-
         }
-        if (digitNumber(otkuda) == digitNumber(wichetaemoe) && resultDel.length > 1) space++
-        it.write("\n${" ".repeat(space)}${" ".repeat(digitNumber(otkuda) - digitNumber(ostatok))}$ostatok")
     }
 }
 
