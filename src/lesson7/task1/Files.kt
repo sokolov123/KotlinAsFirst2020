@@ -546,26 +546,18 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
         val resultDel = (lhv / rhv).toString()
         var otkuda = 0
         var n = 2
-        var space = 0
+        var writterNumb = 0
         var ostatok = 1
         var wichetaemoe = 0
 
         for (i in resultDel.indices) {
 
-            var t = false
+            var t = ostatok == 0
 
-            val m = if (resultDel[i].toInt() > 96) resultDel[i].toInt() - 87
-            else resultDel[i].toInt() - 48
-
-            wichetaemoe = rhv * m // вычитаемое
-
-            if (ostatok == 0) {
-                t = true
-            }
+            wichetaemoe = rhv * (resultDel[i] - '0')
 
             otkuda = if (n == 1) (ostatok * 10) + ((lhv % 10.0.pow(n).toInt()))
             else (ostatok * 10) + ((lhv % 10.0.pow(n).toInt()) / (10.0.pow(n - 1).toInt()))
-
             n--
 
             if (i == 0) {
@@ -576,7 +568,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
                 if (digitNumber(otkuda) == digitNumber(wichetaemoe)) {
                     it.write(" ")
-                    space++
+                    writterNumb++
                 }
 
                 it.write(
@@ -585,39 +577,38 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                             "\n${" ".repeat(digitNumber(wichetaemoe))}$ostatok"
                 )
 
+                writterNumb += digitNumber(otkuda) - digitNumber(ostatok)
+
                 n = digitNumber(lhv) - digitNumber(wichetaemoe)
-                if (resultDel.length > 1) space += (digitNumber(wichetaemoe) - digitNumber(ostatok))
+
+                if (ostatok == 0) {
+                    writterNumb++
+                }
 
             } else {
                 it.write("${otkuda % 10}")
 
                 ostatok = otkuda - wichetaemoe
 
-                if (t) {
-                    space++
-                    t = false
+                if (ostatok == 0 && i != 1 && t) {
+                    writterNumb++
                 }
-
-                space += (digitNumber(wichetaemoe) - digitNumber(wichetaemoe))
 
                 if (digitNumber(otkuda) == digitNumber(wichetaemoe)) {
                     it.write(
-                        "\n${" ".repeat(space - 1)}-$wichetaemoe\n${" ".repeat(space - 1)}${"-".repeat(
-                            digitNumber(
-                                wichetaemoe
-                            ) + 1
-                        )}\n${" ".repeat(space + digitNumber(otkuda) - digitNumber(ostatok))}$ostatok"
+                        "\n${" ".repeat(writterNumb - 1)}-$wichetaemoe\n" +
+                                "${" ".repeat(writterNumb - 1)}${"-".repeat(digitNumber(wichetaemoe) + 1)}"
                     )
-                } else {
-                    it.write(
-                        "\n${" ".repeat(space)}-$wichetaemoe\n${" ".repeat(space)}${"-".repeat(
-                            digitNumber(
-                                wichetaemoe
-                            ) + 1
-                        )}\n${" ".repeat(space + digitNumber(otkuda) - digitNumber(ostatok))}$ostatok"
-                    )
-                }
+                } else it.write(
+                    "\n${" ".repeat(writterNumb)}-$wichetaemoe\n" +
+                            "${" ".repeat(writterNumb)}${"-".repeat(digitNumber(wichetaemoe) + 1)}"
+                )
 
+
+
+                writterNumb += digitNumber(otkuda) - digitNumber(ostatok)
+
+                it.write("\n${" ".repeat(writterNumb)}$ostatok")
 
             }
         }
