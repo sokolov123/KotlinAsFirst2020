@@ -605,9 +605,21 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
                 ostatok = otkuda - wichetaemoe
 
-
-
                 if ((ostatok == 0 && digitNumber(otkuda) != digitNumber(wichetaemoe)) || t) writterNumb++
+
+                if (digitNumber(wichetaemoe) == 1 && digitNumber(otkuda) > 2) {
+                    it.write(
+                        "\n${" ".repeat(writterNumb + digitNumber(otkuda) - 2)}-$wichetaemoe\n${" ".repeat(
+                            writterNumb
+                        )}${"-".repeat(digitNumber(otkuda))}"
+                    )
+                    writterNumb += digitNumber(otkuda) - 1
+
+                    if (digitNumber(ostatok) > 1) writterNumb -= digitNumber(ostatok) - 1
+
+                    it.write("\n${" ".repeat(writterNumb)}$ostatok")
+                    continue
+                }
 
                 if (digitNumber(otkuda) == digitNumber(wichetaemoe))
                     it.write(
