@@ -571,31 +571,32 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                     it.write(" ")
                     writterNumb++
                 }
+                writterNumb += digitNumber(otkuda) - 1
+
+                if (digitNumber(ostatok) > 1) writterNumb -= digitNumber(ostatok) - 1
 
                 if (resultDel.length == 1 && digitNumber(otkuda) != digitNumber(wichetaemoe)) {
                     it.write(
                         "$lhv | $rhv\n-$wichetaemoe${" ".repeat(digitNumber(lhv) - digitNumber(wichetaemoe) + 2)}" +
                                 "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}"
                     )
-                    if (digitNumber(otkuda) == digitNumber(ostatok)) it.write("\n${" ".repeat(digitNumber(wichetaemoe) - 1)}$ostatok")
-                    else it.write("\n${" ".repeat(digitNumber(wichetaemoe))}$ostatok")
                 } else
                     it.write(
                         "$lhv | $rhv\n-$wichetaemoe${" ".repeat(digitNumber(lhv) - digitNumber(wichetaemoe) + 3)}" +
-                                "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}" +
-                                "\n${" ".repeat(digitNumber(wichetaemoe))}$ostatok"
+                                "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}"
                     )
 
+                it.write("\n${" ".repeat(writterNumb)}$ostatok")
 
                 n = digitNumber(lhv) - digitNumber(wichetaemoe)
-
-                writterNumb += digitNumber(otkuda) - digitNumber(ostatok)
 
             } else {
 
                 it.write("${otkuda % 10}")
 
                 ostatok = otkuda - wichetaemoe
+
+
 
                 if ((ostatok == 0 && digitNumber(otkuda) != digitNumber(wichetaemoe)) || t) writterNumb++
 
@@ -606,11 +607,13 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                     )
                 else
                     it.write(
-                    "\n${" ".repeat(writterNumb)}-$wichetaemoe\n" +
-                            "${" ".repeat(writterNumb)}${"-".repeat(digitNumber(wichetaemoe) + 1)}"
+                        "\n${" ".repeat(writterNumb)}-$wichetaemoe\n" +
+                                "${" ".repeat(writterNumb)}${"-".repeat(digitNumber(wichetaemoe) + 1)}"
                     )
 
-                writterNumb += digitNumber(otkuda) - digitNumber(ostatok)
+                writterNumb += digitNumber(otkuda) - 1
+
+                if (digitNumber(ostatok) > 1) writterNumb -= digitNumber(ostatok) - 1
 
                 it.write("\n${" ".repeat(writterNumb)}$ostatok")
             }
