@@ -562,7 +562,8 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
             if (i == 0) {
 
-                otkuda = lhv / 10.0.pow(digitNumber(lhv) - digitNumber(wichetaemoe)).toInt()
+                otkuda = if (resultDel.length == 1) lhv
+                else lhv / 10.0.pow(digitNumber(lhv) - digitNumber(wichetaemoe)).toInt()
 
                 ostatok = otkuda - wichetaemoe
 
@@ -571,45 +572,45 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                     writterNumb++
                 }
 
-                it.write(
-                    "$lhv | $rhv\n-$wichetaemoe${" ".repeat(digitNumber(lhv) - digitNumber(wichetaemoe) + 3)}" +
-                            "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}" +
-                            "\n${" ".repeat(digitNumber(wichetaemoe))}$ostatok"
-                )
-
-                writterNumb += digitNumber(otkuda) - digitNumber(ostatok)
+                if (resultDel.length == 1 && digitNumber(otkuda) != digitNumber(wichetaemoe))
+                    it.write(
+                        "$lhv | $rhv\n-$wichetaemoe${" ".repeat(digitNumber(lhv) - digitNumber(wichetaemoe) + 2)}" +
+                                "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}" +
+                                "\n${" ".repeat(digitNumber(wichetaemoe))}$ostatok"
+                    )
+                else
+                    it.write(
+                        "$lhv | $rhv\n-$wichetaemoe${" ".repeat(digitNumber(lhv) - digitNumber(wichetaemoe) + 3)}" +
+                                "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}" +
+                                "\n${" ".repeat(digitNumber(wichetaemoe))}$ostatok"
+                    )
 
                 n = digitNumber(lhv) - digitNumber(wichetaemoe)
 
-                if (ostatok == 0) {
-                    writterNumb++
-                }
+                writterNumb += if (ostatok == 0) 1
+                else digitNumber(otkuda) - digitNumber(ostatok)
 
             } else {
                 it.write("${otkuda % 10}")
 
                 ostatok = otkuda - wichetaemoe
 
-                if (ostatok == 0 && i != 1 && t) {
-                    writterNumb++
-                }
+                if (ostatok == 0 && i != 1 && t) writterNumb++
 
-                if (digitNumber(otkuda) == digitNumber(wichetaemoe)) {
+                if (digitNumber(otkuda) == digitNumber(wichetaemoe))
                     it.write(
                         "\n${" ".repeat(writterNumb - 1)}-$wichetaemoe\n" +
                                 "${" ".repeat(writterNumb - 1)}${"-".repeat(digitNumber(wichetaemoe) + 1)}"
                     )
-                } else it.write(
+                else
+                    it.write(
                     "\n${" ".repeat(writterNumb)}-$wichetaemoe\n" +
                             "${" ".repeat(writterNumb)}${"-".repeat(digitNumber(wichetaemoe) + 1)}"
-                )
-
-
+                    )
 
                 writterNumb += digitNumber(otkuda) - digitNumber(ostatok)
 
                 it.write("\n${" ".repeat(writterNumb)}$ostatok")
-
             }
         }
     }
