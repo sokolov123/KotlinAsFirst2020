@@ -564,7 +564,6 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
                 otkuda = if (resultDel.length == 1) lhv
                 else lhv / 10.0.pow(digitNumber(lhv) - digitNumber(wichetaemoe)).toInt()
-
                 ostatok = otkuda - wichetaemoe
 
                 if (digitNumber(otkuda) == digitNumber(wichetaemoe)) {
@@ -572,7 +571,6 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                     writterNumb++
                 }
                 writterNumb += digitNumber(otkuda) - 1
-
                 if (digitNumber(ostatok) > 1) writterNumb -= digitNumber(ostatok) - 1
 
                 if (wichetaemoe == 0 && digitNumber(lhv) > 2) {
@@ -598,13 +596,10 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                 it.write("\n${" ".repeat(writterNumb)}$ostatok")
 
                 n = digitNumber(lhv) - digitNumber(wichetaemoe)
-
             } else {
-
                 it.write("${otkuda % 10}")
 
                 ostatok = otkuda - wichetaemoe
-
                 if ((ostatok == 0 && digitNumber(otkuda) != digitNumber(wichetaemoe)) || t) writterNumb++
 
                 if (digitNumber(wichetaemoe) == 1 && digitNumber(otkuda) > 2) {
@@ -613,11 +608,12 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                             writterNumb
                         )}${"-".repeat(digitNumber(otkuda))}"
                     )
-                    writterNumb += digitNumber(otkuda) - 1
 
+                    writterNumb += digitNumber(otkuda) - 1
                     if (digitNumber(ostatok) > 1) writterNumb -= digitNumber(ostatok) - 1
 
                     it.write("\n${" ".repeat(writterNumb)}$ostatok")
+
                     continue
                 }
 
@@ -633,7 +629,6 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                     )
 
                 writterNumb += digitNumber(otkuda) - 1
-
                 if (digitNumber(ostatok) > 1) writterNumb -= digitNumber(ostatok) - 1
 
                 it.write("\n${" ".repeat(writterNumb)}$ostatok")
