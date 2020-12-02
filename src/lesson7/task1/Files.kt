@@ -575,6 +575,15 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
                 if (digitNumber(ostatok) > 1) writterNumb -= digitNumber(ostatok) - 1
 
+                if (wichetaemoe == 0 && digitNumber(lhv) > 2) {
+                    it.write(
+                        "$lhv | $rhv\n${" ".repeat(digitNumber(lhv) - 2)}-$wichetaemoe${" ".repeat(3)}" +
+                                "$resultDel\n${"-".repeat(digitNumber(lhv))}"
+                    )
+                    it.write("\n${" ".repeat(writterNumb)}$ostatok")
+                    continue
+                }
+
                 if (resultDel.length == 1 && digitNumber(otkuda) != digitNumber(wichetaemoe)) {
                     it.write(
                         "$lhv | $rhv\n-$wichetaemoe${" ".repeat(digitNumber(lhv) - digitNumber(wichetaemoe) + 2)}" +
