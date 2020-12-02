@@ -2,12 +2,9 @@
 
 package lesson7.task1
 
-import lesson2.task2.queenThreatens
 import lesson3.task1.digitNumber
-import lesson5.task1.canBuildFrom
 import java.io.File
 import kotlin.math.pow
-import kotlin.math.sign
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -544,94 +541,94 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     File(outputName).bufferedWriter().use {
 
         val resultDel = (lhv / rhv).toString()
-        var otkuda = 0
+        var minuend = 0
         var n = 2
         var writterNumb = 0
-        var ostatok = 1
-        var wichetaemoe = 0
+        var remains = 1
+        var subtrahend = 0
 
         for (i in resultDel.indices) {
 
-            var t = ostatok == 0
+            var t = remains == 0
 
-            wichetaemoe = rhv * (resultDel[i] - '0')
+            subtrahend = rhv * (resultDel[i] - '0')
 
-            otkuda = if (n == 1) (ostatok * 10) + ((lhv % 10.0.pow(n).toInt()))
-            else (ostatok * 10) + ((lhv % 10.0.pow(n).toInt()) / (10.0.pow(n - 1).toInt()))
+            minuend = if (n == 1) (remains * 10) + ((lhv % 10.0.pow(n).toInt()))
+            else (remains * 10) + ((lhv % 10.0.pow(n).toInt()) / (10.0.pow(n - 1).toInt()))
             n--
 
             if (i == 0) {
 
-                otkuda = if (resultDel.length == 1) lhv
-                else lhv / 10.0.pow(digitNumber(lhv) - digitNumber(wichetaemoe)).toInt()
-                ostatok = otkuda - wichetaemoe
+                minuend = if (resultDel.length == 1) lhv
+                else lhv / 10.0.pow(digitNumber(lhv) - digitNumber(subtrahend)).toInt()
+                remains = minuend - subtrahend
 
-                if (digitNumber(otkuda) == digitNumber(wichetaemoe)) {
+                if (digitNumber(minuend) == digitNumber(subtrahend)) {
                     it.write(" ")
                     writterNumb++
                 }
-                writterNumb += digitNumber(otkuda) - 1
-                if (digitNumber(ostatok) > 1) writterNumb -= digitNumber(ostatok) - 1
+                writterNumb += digitNumber(minuend) - 1
+                if (digitNumber(remains) > 1) writterNumb -= digitNumber(remains) - 1
 
-                if (wichetaemoe == 0 && digitNumber(lhv) > 2) {
+                if (subtrahend == 0 && digitNumber(lhv) > 2) {
                     it.write(
-                        "$lhv | $rhv\n${" ".repeat(digitNumber(lhv) - 2)}-$wichetaemoe${" ".repeat(3)}" +
+                        "$lhv | $rhv\n${" ".repeat(digitNumber(lhv) - 2)}-$subtrahend${" ".repeat(3)}" +
                                 "$resultDel\n${"-".repeat(digitNumber(lhv))}"
                     )
-                    it.write("\n${" ".repeat(writterNumb)}$ostatok")
+                    it.write("\n${" ".repeat(writterNumb)}$remains")
                     continue
                 }
 
-                if (resultDel.length == 1 && digitNumber(otkuda) != digitNumber(wichetaemoe)) {
+                if (resultDel.length == 1 && digitNumber(minuend) != digitNumber(subtrahend)) {
                     it.write(
-                        "$lhv | $rhv\n-$wichetaemoe${" ".repeat(digitNumber(lhv) - digitNumber(wichetaemoe) + 2)}" +
-                                "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}"
+                        "$lhv | $rhv\n-$subtrahend${" ".repeat(digitNumber(lhv) - digitNumber(subtrahend) + 2)}" +
+                                "$resultDel\n${"-".repeat(digitNumber(subtrahend) + 1)}"
                     )
                 } else
                     it.write(
-                        "$lhv | $rhv\n-$wichetaemoe${" ".repeat(digitNumber(lhv) - digitNumber(wichetaemoe) + 3)}" +
-                                "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}"
+                        "$lhv | $rhv\n-$subtrahend${" ".repeat(digitNumber(lhv) - digitNumber(subtrahend) + 3)}" +
+                                "$resultDel\n${"-".repeat(digitNumber(subtrahend) + 1)}"
                     )
 
-                it.write("\n${" ".repeat(writterNumb)}$ostatok")
+                it.write("\n${" ".repeat(writterNumb)}$remains")
 
-                n = digitNumber(lhv) - digitNumber(wichetaemoe)
+                n = digitNumber(lhv) - digitNumber(subtrahend)
             } else {
-                it.write("${otkuda % 10}")
+                it.write("${minuend % 10}")
 
-                ostatok = otkuda - wichetaemoe
-                if ((ostatok == 0 && digitNumber(otkuda) != digitNumber(wichetaemoe)) || t) writterNumb++
+                remains = minuend - subtrahend
+                if ((remains == 0 && digitNumber(minuend) != digitNumber(subtrahend)) || t) writterNumb++
 
-                if (digitNumber(wichetaemoe) == 1 && digitNumber(otkuda) > 2) {
+                if (digitNumber(subtrahend) == 1 && digitNumber(minuend) > 2) {
                     it.write(
-                        "\n${" ".repeat(writterNumb + digitNumber(otkuda) - 2)}-$wichetaemoe\n${" ".repeat(
+                        "\n${" ".repeat(writterNumb + digitNumber(minuend) - 2)}-$subtrahend\n${" ".repeat(
                             writterNumb
-                        )}${"-".repeat(digitNumber(otkuda))}"
+                        )}${"-".repeat(digitNumber(minuend))}"
                     )
 
-                    writterNumb += digitNumber(otkuda) - 1
-                    if (digitNumber(ostatok) > 1) writterNumb -= digitNumber(ostatok) - 1
+                    writterNumb += digitNumber(minuend) - 1
+                    if (digitNumber(remains) > 1) writterNumb -= digitNumber(remains) - 1
 
-                    it.write("\n${" ".repeat(writterNumb)}$ostatok")
+                    it.write("\n${" ".repeat(writterNumb)}$remains")
 
                     continue
                 }
 
-                if (digitNumber(otkuda) == digitNumber(wichetaemoe))
+                if (digitNumber(minuend) == digitNumber(subtrahend))
                     it.write(
-                        "\n${" ".repeat(writterNumb - 1)}-$wichetaemoe\n" +
-                                "${" ".repeat(writterNumb - 1)}${"-".repeat(digitNumber(wichetaemoe) + 1)}"
+                        "\n${" ".repeat(writterNumb - 1)}-$subtrahend\n" +
+                                "${" ".repeat(writterNumb - 1)}${"-".repeat(digitNumber(subtrahend) + 1)}"
                     )
                 else
                     it.write(
-                        "\n${" ".repeat(writterNumb)}-$wichetaemoe\n" +
-                                "${" ".repeat(writterNumb)}${"-".repeat(digitNumber(wichetaemoe) + 1)}"
+                        "\n${" ".repeat(writterNumb)}-$subtrahend\n" +
+                                "${" ".repeat(writterNumb)}${"-".repeat(digitNumber(subtrahend) + 1)}"
                     )
 
-                writterNumb += digitNumber(otkuda) - 1
-                if (digitNumber(ostatok) > 1) writterNumb -= digitNumber(ostatok) - 1
+                writterNumb += digitNumber(minuend) - 1
+                if (digitNumber(remains) > 1) writterNumb -= digitNumber(remains) - 1
 
-                it.write("\n${" ".repeat(writterNumb)}$ostatok")
+                it.write("\n${" ".repeat(writterNumb)}$remains")
             }
         }
     }
