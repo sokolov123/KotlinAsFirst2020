@@ -589,15 +589,15 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
                 n = digitNumber(lhv) - digitNumber(wichetaemoe)
 
-                writterNumb += if (ostatok == 0) 1
-                else digitNumber(otkuda) - digitNumber(ostatok)
+                writterNumb += digitNumber(otkuda) - digitNumber(ostatok)
 
             } else {
+
                 it.write("${otkuda % 10}")
 
                 ostatok = otkuda - wichetaemoe
 
-                if (ostatok == 0 && i != 1 && t) writterNumb++
+                if ((ostatok == 0 && digitNumber(otkuda) != digitNumber(wichetaemoe)) || t) writterNumb++
 
                 if (digitNumber(otkuda) == digitNumber(wichetaemoe))
                     it.write(
