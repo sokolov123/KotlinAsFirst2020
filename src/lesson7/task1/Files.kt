@@ -572,18 +572,20 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
                     writterNumb++
                 }
 
-                if (resultDel.length == 1 && digitNumber(otkuda) != digitNumber(wichetaemoe))
+                if (resultDel.length == 1 && digitNumber(otkuda) != digitNumber(wichetaemoe)) {
                     it.write(
                         "$lhv | $rhv\n-$wichetaemoe${" ".repeat(digitNumber(lhv) - digitNumber(wichetaemoe) + 2)}" +
-                                "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}" +
-                                "\n${" ".repeat(digitNumber(wichetaemoe))}$ostatok"
+                                "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}"
                     )
-                else
+                    if (digitNumber(otkuda) == digitNumber(ostatok)) it.write("\n${" ".repeat(digitNumber(wichetaemoe) - 1)}$ostatok")
+                    else it.write("\n${" ".repeat(digitNumber(wichetaemoe))}$ostatok")
+                } else
                     it.write(
                         "$lhv | $rhv\n-$wichetaemoe${" ".repeat(digitNumber(lhv) - digitNumber(wichetaemoe) + 3)}" +
                                 "$resultDel\n${"-".repeat(digitNumber(wichetaemoe) + 1)}" +
                                 "\n${" ".repeat(digitNumber(wichetaemoe))}$ostatok"
                     )
+
 
                 n = digitNumber(lhv) - digitNumber(wichetaemoe)
 
