@@ -93,7 +93,6 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
             n = textToLowerCase.indexOf(j.toLowerCase(), n + 1)
             result[j] = result[j]!! + 1
         }
-
     }
     return result
 }
@@ -307,25 +306,24 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
         "<html>", "<body>", "<p>", "<i>", "</i>", "<b>",
         "</b>", "<s>", "</s>", "</p>", "</body>", "</html>"
     )
-    var t = 0
-    val singsHTML = listOf("*", "~")
 
     File(outputName).bufferedWriter().use {
         it.write("${valuesList[0]}\n${valuesList[1]}\n${valuesList[2]}")
         it.newLine()
-        val checker = mutableMapOf("~" to false, "*" to false, "**" to false, "***" to false)
+
 
         for ((int, str) in File(inputName).readLines().withIndex()) {
+            val checker = mutableMapOf("~" to false, "*" to false, "**" to false, "***" to false)
             if (str.isEmpty()) {
                 if (int != 0) it.write("\n${valuesList[9]}\n${valuesList[2]}")
                 it.newLine()
             }
             for ((number, symbol) in str.withIndex())
-                if (symbol.toString() !in singsHTML) it.write(symbol.toString())
-                else
+                if (symbol.toString() !in checker.keys || number + 1 == str.length) it.write(symbol.toString())
+                else {
                     when (symbol.toString()) {
-                        "~" -> if (number <= str.length - 2)
-                            if (str[number + 1].toString() == "~")
+                        "~" -> {
+                            if (str[number + 1].toString() == "~") {
                                 if (checker["~"] == false) {
                                     it.write(valuesList[7])
                                     checker["~"] = true
@@ -333,42 +331,49 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
                                     it.write(valuesList[8])
                                     checker["~"] = false
                                 }
+                            }
+                        }
                         "*" -> {
-                            if (t != 0) {
-                                t--
-                                continue
-                            }
-                            if (number <= str.length - 3 && str[number + 1].toString() == "*" && str[number + 2].toString() == "*") {
-                                t = 2
-                                if ((checker["*"] == true && checker["**"] == true) || checker["***"] == true) {
-                                    it.write("${valuesList[6]}${valuesList[4]}")
-                                    checker["*"] = false
-                                    checker["**"] = false
-                                } else {
-                                    it.write("${valuesList[5]}${valuesList[3]}")
-                                    checker["***"] = true
+                            if (number <= str.length - 3) {
+                                if (str[number + 1].toString() == "*" && str[number + 2].toString() == "*") {
+                                    if (checker["***"] == true || (checker["*"] == true && checker["**"] == true)) {
+                                        it.write("${valuesList[6]}${valuesList[4]}")
+                                        checker["***"] = false
+                                        checker["**"] == false
+                                        checker["*"] == false
+                                        continue
+                                    } else {
+                                        it.write("${valuesList[5]}${valuesList[3]}")
+                                        checker["***"] = true
+                                        continue
+                                    }
                                 }
-                                continue
                             }
-                            if (number <= str.length - 2 && str[number + 1].toString() == "*") {
-                                t = 1
-                                if (checker["**"] == false) {
-                                    it.write(valuesList[5])
-                                    checker["**"] = true
-                                } else {
-                                    it.write(valuesList[6])
-                                    checker["**"] = false
-                                }
-                            } else
-                                if (checker["*"] == false) {
-                                    it.write(valuesList[3])
-                                    checker["*"] = true
-                                } else {
+                            if (number <= str.length - 2) {
+                                if (str[number - 1].toString() != "*")
+                                    if (str[number + 1].toString() == "*") {
+                                        if (checker["**"] == true || checker["***"] == true) {
+                                            it.write(valuesList[6])
+                                            checker["**"] = false
+                                            continue
+                                        } else {
+                                            it.write(valuesList[5])
+                                            checker["**"] = true
+                                            continue
+                                        }
+                                    }
+                            }
+                            if (str[number - 1].toString() != "*")
+                                if (checker["*"] == true || checker["***"] == true) {
                                     it.write(valuesList[4])
                                     checker["*"] = false
+                                } else {
+                                    it.write(valuesList[3])
+                                    checker["*"] = true
                                 }
                         }
                     }
+                }
         }
         it.write("\n${valuesList[9]}\n${valuesList[10]}\n${valuesList[11]}")
     }
@@ -432,15 +437,13 @@ fun markdownToHtmlSimple(inputName: String, outputName: String) {
 <body>
 <p>
 <ul>
-<li>
-Утка по-пекински
+<li>Утка по-пекински
 <ul>
 <li>Утка</li>
 <li>Соус</li>
 </ul>
 </li>
-<li>
-Салат Оливье
+<li>Салат Оливье
 <ol>
 <li>Мясо
 <ul>
@@ -542,7 +545,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
         val resultDel = (lhv / rhv).toString()
         var minuend = 0
-        var n = 2
+        var n = 100
         var writterNumb = 0
         var remains = 1
         var subtrahend = 0
@@ -553,9 +556,9 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
             subtrahend = rhv * (resultDel[i] - '0')
 
-            minuend = if (n == 1) (remains * 10) + ((lhv % 10.0.pow(n).toInt()))
-            else (remains * 10) + ((lhv % 10.0.pow(n).toInt()) / (10.0.pow(n - 1).toInt()))
-            n--
+            minuend = if (n == 1) (remains * 10) + ((lhv % n))
+            else (remains * 10) + ((lhv % n) / (n / 10))
+            n /= 10
 
             if (i == 0) {
 
@@ -592,7 +595,7 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
                 it.write("\n${" ".repeat(writterNumb)}$remains")
 
-                n = digitNumber(lhv) - digitNumber(subtrahend)
+                n = 10.0.pow(digitNumber(lhv) - digitNumber(subtrahend)).toInt()
             } else {
                 it.write("${minuend % 10}")
 
